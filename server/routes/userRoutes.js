@@ -2,6 +2,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 const router = express.Router();
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
 
 router.post("/register", async (req, res) => {
   const { email, username, password } = req.body;
@@ -28,18 +29,15 @@ router.post("/login", async (req, res) => {
   if (!user) {
     return res.status(400).json({ message: "User does not exist" });
   }
-  try {
-    if (await bcrypt.compare(password, user.password)) {
-      res.status(200).json({ message: "User logged in successfully" });
-      console.log("User logged in successfully");
-    } else {
-      res.status(400).json({ message: "Invalid credentials" });
-      console.log("Invalid credentials");
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Server Error" });
-    console.log(error);
+  const validPassword = await bcrypt.compare(password, user.password);
+  if (!validPassword) {
+    return res.status(400).json({ message: "Incorrect password" });
   }
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "2h",
+  });
+  res.cookie("token", token, { httpOnly: true, maxAge: 2 * 60 * 60 * 1000 }); // 2 hours
+  res.status(200).json({ message: "Login successful" });
 });
 
 export default router;

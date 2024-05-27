@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -8,6 +8,7 @@ const Login = () => {
     password: "",
   });
   const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
   const { email, password } = formData;
 
   const handleChange = (e) => {
