@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -27,10 +29,13 @@ const Login = () => {
         formData
       );
       if (response.status === 200) {
+        console.log("Showing toast"); // Debugging line
+        toast.success("Login successful");
         navigate("/dashboard");
       }
     } catch (error) {
       console.log(error);
+      toast.error("Login failed. Please try again.");
     }
   };
 
@@ -71,6 +76,7 @@ const Login = () => {
           </Link>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

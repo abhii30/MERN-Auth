@@ -28,7 +28,8 @@ const Register = () => {
         formData
       );
       if (response.status === 200) {
-        navigate("/dashboard");
+        alert("User created successfully");
+        navigate("/");
       }
     } catch (error) {
       console.log(error);
