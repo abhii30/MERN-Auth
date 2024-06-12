@@ -38,7 +38,7 @@ router.post("/login", async (req, res) => {
     expiresIn: "2h",
   });
   res.cookie("token", token, { httpOnly: true, maxAge: 2 * 60 * 60 * 1000 }); // 2 hours
-  res.status(200).json({ message: "Login successful" });
+  res.status(200).json({ message: "Login successful", userId: user._id });
   console.log(token);
 });
 
@@ -98,6 +98,11 @@ router.post("/resetPassword/:token", async (req, res) => {
     res.status(400).json({ message: "Password reset link has expired" });
     console.log(error);
   }
+});
+
+router.get("/logout", (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({ message: "Logged out" });
 });
 
 export default router;

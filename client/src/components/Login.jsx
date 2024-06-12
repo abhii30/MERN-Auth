@@ -28,10 +28,11 @@ const Login = () => {
         `http://localhost:3000/auth/login`,
         formData
       );
+      const { userId } = response.data;
       if (response.status === 200) {
         toast.success("Login successful");
         setTimeout(() => {
-          navigate("/");
+          navigate(`/${userId}`);
         }, 2500);
       }
     } catch (error) {
