@@ -10,7 +10,7 @@ const Login = () => {
     password: "",
   });
   const navigate = useNavigate();
-  axios.defaults.withCredentials = true;
+  axios.defaults.withCredentials = true; // Add this line to enable cookie sharing
   const { email, password } = formData;
 
   const handleChange = (e) => {
@@ -29,20 +29,21 @@ const Login = () => {
         formData
       );
       if (response.status === 200) {
-        console.log("Showing toast"); // Debugging line
         toast.success("Login successful");
-        navigate("/dashboard");
+        setTimeout(() => {
+          navigate("/");
+        }, 2500);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Login failed. Please try again.");
+      toast.error("Wrong email or password");
     }
   };
 
   return (
     <div className="flex justify-center items-center h-[90%]">
-      <div className="flex flex-col items-center shadow-2xl absolute pt-10 p-8 w-1/2 md:w-1/3 lg:p-20 rounded-lg">
-        <h1 className="text-black text-3xl mb-5">Login</h1>
+      <div className="flex flex-col shadow-2xl absolute pt-10 p-8 w-1/2 md:w-1/3 lg:p-20 rounded-lg">
+        <h1 className="text-black text-3xl mb-5 text-center">Login</h1>
         <form
           className="flex flex-col gap-4 w-full text-black"
           onSubmit={handleSubmit}
@@ -68,6 +69,13 @@ const Login = () => {
             Login
           </button>
         </form>
+        <Link
+          to="/forgotPassword"
+          className="text-red-600 mt-1 text-right text-xs"
+        >
+          Forgot Password?
+        </Link>
+
         <div className="flex justify-center text-sm mt-1">
           <span className="text-black">New User? </span>
           <span>&nbsp;</span>

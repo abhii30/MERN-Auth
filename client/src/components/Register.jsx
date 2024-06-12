@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Profile from "../assets/profile.svg";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -19,7 +21,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !username || !password) {
-      alert("All fields are required");
+      toast.info("All fields are required");
       return;
     }
     try {
@@ -28,11 +30,19 @@ const Register = () => {
         formData
       );
       if (response.status === 200) {
-        alert("User created successfully");
-        navigate("/");
+        toast.success("User created successfully");
+        setTimeout(() => {
+          navigate("/");
+        }, 2500);
       }
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 400) {
+        toast.error(
+          "User already exists. Please login or use a different email address."
+        );
+      } else {
+        console.log(error);
+      }
     }
   };
 
@@ -79,11 +89,12 @@ const Register = () => {
         <div className="flex justify-center text-sm mt-1">
           <span className="text-black">Already have an account? </span>
           <span>&nbsp;</span>
-          <Link to="/" className="text-red-600">
+          <Link to="/login" className="text-red-600">
             Login
           </Link>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
